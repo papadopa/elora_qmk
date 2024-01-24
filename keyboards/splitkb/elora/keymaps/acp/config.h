@@ -21,3 +21,25 @@
 
 // Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed
 #define DEBOUNCE 5
+
+
+
+// acp customization.
+
+// USB fix.
+#define SPLIT_USB_TIMEOUT 10000
+#define SPLIT_USB_TIMEOUT_POLL 10
+
+#define IGNORE_MOD_TAP_INTERRUPT
+#define PERMISSIVE_HOLD
+#define AUTO_SHIFT_REPEAT
+#define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
+
+#define TAPPING_FORCE_HOLD
+#ifdef TAPPING_TERM
+    #undef TAPPING_TERM
+    #define TAPPING_TERM 200
+#endif
+
+#define RGBLIGHT_SLEEP
+

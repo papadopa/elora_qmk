@@ -391,6 +391,8 @@ void myriad_task(void) {
             // Handled via hook
             break;
         case SKB_ENCODER:
+	    // Fix for product ID being wrong for joysticks.
+            myr_joystick_task();
             // Handled via hook
             break;
         case SKB_JOYSTICK:
