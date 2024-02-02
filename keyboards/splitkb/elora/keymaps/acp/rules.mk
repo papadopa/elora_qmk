@@ -38,3 +38,4 @@ NKRO_ENABLE = yes          # Enable N-Key Rollover
 # acp customization.
 AUTO_SHIFT_ENABLE = yes
 CAPS_WORD_ENABLE = yes
+TAP_DANCE_ENABLE = yes

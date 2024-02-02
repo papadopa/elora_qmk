@@ -42,3 +42,4 @@
 
 #define RGBLIGHT_SLEEP
 
+#define ENCODER_RESOLUTION 4
