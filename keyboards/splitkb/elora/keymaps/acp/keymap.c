@@ -70,9 +70,10 @@ typedef struct {
 
 // Tap dance enums
 enum {
-    OP_BRA,  // Open parenthesis on single tap, open curly bracket on hold, open square bracket on double-tap.
-    CL_BRA,  // Close of OP_BRA.
-    DA_ALTGR // Dead accent grave on single tap, dead accent aigu on double-tap, dead circumflex on tap and hold, AltGr on hold.
+    OP_BRA,   // Open parenthesis on single tap, open curly bracket on hold, open square bracket on double-tap.
+    CL_BRA,   // Close of OP_BRA.
+    DA_ALTGR, // Dead accent grave on single tap, dead accent aigu on double-tap, dead circumflex on tap and hold, AltGr on hold.
+    MEDIA,    // Play/pause on tap, Next on double-tap, Back on tap and hold.
 };
 
 td_state_t cur_dance(tap_dance_state_t *state);
@@ -121,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_ESC  , KC_Q ,  KC_W   ,  KC_E  ,   KC_R ,   KC_T ,         _______,     _______,          KC_Y ,  KC_U ,  KC_I ,   KC_O ,  KC_P , KC_BSPC,
       KC_TAB  , KC_A ,  KC_S   ,  KC_D  ,   KC_F ,   KC_G ,         _______,     _______,          KC_H ,  KC_J ,  KC_K ,   KC_L ,KC_SCLN,KC_QUOT,
       KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_MINS,TD(OP_BRA),TD(CL_BRA), KC_EQL, KC_N ,  KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                 KC_LGUI , KC_LCTL, MO(1) , ALT_SPC , KC_MPLY   ,     KC_RCTL    , KC_ENT ,MO(2),TD(DA_ALTGR), KC_RGUI,
+                                 KC_LGUI , KC_LCTL, MO(1) , ALT_SPC ,TD(MEDIA),     KC_RCTL    , KC_ENT ,MO(2),TD(DA_ALTGR), KC_RGUI,
 
       _______, _______, _______, _______,    _______,                            _______, _______, _______, _______,    _______
     ),
@@ -430,10 +431,38 @@ void dead_accents_altgr_reset(tap_dance_state_t *state, void *user_data) {
     dead_accents_altgr_tap_state.state = TD_NONE;
 }
 
+// MEDIA advanced tap-dance setup.
+static td_tap_t media_tap_state = {
+    .is_press_action = true,
+    .state = TD_NONE
+};
+
+void media_finished(tap_dance_state_t *state, void *user_data) {
+    media_tap_state.state = cur_dance(state);
+    switch (media_tap_state.state) {
+        case TD_SINGLE_TAP: register_code(KC_MPLY); break;
+        case TD_SINGLE_HOLD: register_code(KC_MPRV); break;
+        case TD_DOUBLE_TAP: register_code(KC_MNXT); break;
+        default: break;
+    }
+}
+
+void media_reset(tap_dance_state_t *state, void *user_data) {
+    switch (media_tap_state.state) {
+        case TD_SINGLE_TAP: unregister_code(KC_MPLY); break;
+        case TD_SINGLE_HOLD: unregister_code(KC_MPRV); break;
+        case TD_DOUBLE_TAP: unregister_code(KC_MNXT); break;
+        default: break;
+    }
+    media_tap_state.state = TD_NONE;
+}
+
+
 tap_dance_action_t tap_dance_actions[] = {
     [OP_BRA] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, open_brackets_finished, open_brackets_reset),
     [CL_BRA] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, close_brackets_finished, close_brackets_reset),
-    [DA_ALTGR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dead_accents_altgr_finished, dead_accents_altgr_reset)
+    [DA_ALTGR] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dead_accents_altgr_finished, dead_accents_altgr_reset),
+    [MEDIA] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, media_finished, media_reset)
 };
 
 //// Add support for some of the custom keycodes (macros) above.
