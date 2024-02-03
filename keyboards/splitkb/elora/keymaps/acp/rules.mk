@@ -39,3 +39,5 @@ NKRO_ENABLE = yes          # Enable N-Key Rollover
 AUTO_SHIFT_ENABLE = yes
 CAPS_WORD_ENABLE = yes
 TAP_DANCE_ENABLE = yes
+MOUSEKEY_ENABLE = yes
+

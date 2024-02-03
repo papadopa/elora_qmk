@@ -23,12 +23,13 @@
 #define DEBOUNCE 5
 
 
-
 // acp customization.
 
 // USB fix.
-#define SPLIT_USB_TIMEOUT 10000
-#define SPLIT_USB_TIMEOUT_POLL 10
+//#define SPLIT_USB_TIMEOUT 10000
+//#define SPLIT_USB_TIMEOUT_POLL 10
+#define SPLIT_USB_DETECT
+#define SPLIT_WATCHDOG_ENABLE
 
 #define PERMISSIVE_HOLD
 #define AUTO_SHIFT_REPEAT

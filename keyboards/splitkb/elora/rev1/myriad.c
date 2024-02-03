@@ -178,7 +178,11 @@ static myriad_card_t _detect_myriad(void) {
     if (!read_card_identity(data, data_size, &identity)) { return INVALID; }
 
     if (identity.vendor_id == 0x0001 && identity.product_id == 0x0001) {
-        return SKB_ENCODER;
+	if (is_keyboard_left()) {
+            return SKB_ENCODER;
+	} else {
+           return SKB_JOYSTICK;
+	}
     } else if (identity.vendor_id == 0x0001 && identity.product_id == 0x0002) {
         return SKB_JOYSTICK;
     } else if (identity.vendor_id == 0x0001 && identity.product_id == 0x0003) {

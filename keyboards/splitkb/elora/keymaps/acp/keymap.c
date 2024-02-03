@@ -124,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_MINS,TD(OP_BRA),TD(CL_BRA), KC_EQL, KC_N ,  KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
                                  KC_LGUI , KC_LCTL, MO(1) , ALT_SPC ,TD(MEDIA),     KC_RCTL    , KC_ENT ,MO(2),TD(DA_ALTGR), KC_RGUI,
 
-      _______, _______, _______, _______,    _______,                            _______, _______, _______, _______,    _______
+      _______, _______, _______, _______,    KC_MUTE,                            _______, _______, _______, _______,    KC_BTN1
     ),
 
 /*
@@ -154,7 +154,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TRNS , UNDO ,  CUT    ,  COPY  ,  PASTE ,_______, KC_TRNS,KC_TRNS,     KC_TRNS, KC_TRNS,_______,_______,_______,_______ ,_______, KC_TRNS,
                                  KC_TRNS, KC_TRNS,KC_TRNS, KC_TRNS,KC_TRNS,     KC_TRNS       , KC_TRNS ,MO(3),KC_TRNS, KC_TRNS,
 
-      _______, _______, _______, _______,    _______,                            _______, _______, _______, _______,    _______
+      _______, _______, _______, _______,    KC_TRNS,                            _______, _______, _______, _______,    _______
     ),
 
 
@@ -185,7 +185,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TRNS , UNDO ,  CUT    ,  COPY  ,  PASTE ,_______, KC_TRNS,KC_TRNS,     KC_TRNS, KC_TRNS,KC_LBRC,KC_RBRC, KC_EQL ,_______ ,KC_BSLS, KC_TRNS,
                                  KC_TRNS, KC_TRNS,KC_TRNS, KC_TRNS,KC_TRNS,     KC_TRNS       , KC_TRNS ,KC_TRNS,KC_TRNS, KC_TRNS,
 
-      _______, _______, _______, _______,    _______,                            _______, _______, _______, _______,    _______
+      _______, _______, _______, _______,    KC_TRNS,                            _______, _______, _______, _______,    _______
     ),
 
 
@@ -216,7 +216,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TRNS ,RGB_HUD,RGB_SAD ,RGB_VAD , RGB_MOD,KC_MUTE, KC_TRNS,KC_TRNS,     KC_TRNS, KC_TRNS,SCREENS, WDOWS , LOCK  ,_______,_______,_______,
                                  KC_TRNS, KC_TRNS,KC_TRNS, KC_TRNS,KC_TRNS,     KC_TRNS       , KC_TRNS ,KC_TRNS,SWITCH , KC_TRNS,
 
-      _______, _______, _______, _______,    _______,                            _______, _______, _______, _______,    _______
+      _______, _______, _______, _______,    KC_TRNS,                            _______, _______, _______, _______,    _______
     ),
 
 
