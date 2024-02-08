@@ -21,18 +21,9 @@ enum layers {
     _LAYER_1,
     _LAYER_2,
     _LAYER_3,
+    _MOUSE,
 };
 
-// Aliases for readability
-#define BASE   DF(_BASE)
-#define LAYER_1  DF(_LAYER_1)
-#define LAYER_2  DF(_LAYER_2)
-#define LAYER_3  DF(_LAYER_3)
-
-#define CTL_ESC  MT(MOD_LCTL, KC_ESC)
-#define CTL_QUOT MT(MOD_RCTL, KC_QUOTE)
-#define CTL_MINS MT(MOD_RCTL, KC_MINUS)
-#define ALT_ENT  MT(MOD_LALT, KC_ENT)
 #define ALT_SPC  LALT_T(KC_SPC)
 
 #define UNDO  LCTL(KC_Z)
@@ -92,6 +83,7 @@ enum custom_keycodes {
     MA_DEAD_AIGU,
     MA_DEAD_CIRC,
     MA_ALTGR,
+    DRAG_SCROLL,
 };
 
 
@@ -109,8 +101,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+------+------|  |------|------+------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   V  |   B  | - _  | ({[  |  |  ]}) |  = + |   N  |   M  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | LGUI | LCTL | MO(1)| Alt/ | Pause|  | RCTL | Enter| MO(2)| AltGr| RGUI |
- *                        |      |      |      |  Spc |      |  |      |      |      |      |      |
+ *                        | LGUI | LCTL | MO(1)| Alt/ | Pause|  |DRAG_ | Enter| MO(2)| AltGr| RGUI |
+ *                        |      |      |      |  Spc |      |  |SCROLL|      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  *
  * ,----------------------------.      ,------.                 ,----------------------------.      ,------.
@@ -122,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_ESC  , KC_Q ,  KC_W   ,  KC_E  ,   KC_R ,   KC_T ,         _______,     _______,          KC_Y ,  KC_U ,  KC_I ,   KC_O ,  KC_P , KC_BSPC,
       KC_TAB  , KC_A ,  KC_S   ,  KC_D  ,   KC_F ,   KC_G ,         _______,     _______,          KC_H ,  KC_J ,  KC_K ,   KC_L ,KC_SCLN,KC_QUOT,
       KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_MINS,TD(OP_BRA),TD(CL_BRA), KC_EQL, KC_N ,  KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                 KC_LGUI , KC_LCTL, MO(1) , ALT_SPC ,TD(MEDIA),     KC_RCTL    , KC_ENT ,MO(2),TD(DA_ALTGR), KC_RGUI,
+                                 KC_LGUI , KC_LCTL, MO(1) , ALT_SPC ,TD(MEDIA),DRAG_SCROLL,KC_ENT,MO(2),TD(DA_ALTGR), KC_RGUI,
 
       _______, _______, _______, _______,    KC_MUTE,                            _______, _______, _______, _______,    KC_BTN1
     ),
@@ -219,6 +211,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, _______, _______, _______,    KC_TRNS,                            _______, _______, _______, _______,    _______
     ),
 
+
+/*
+ * Mouse layer
+ *
+ * ,-------------------------------------------.      ,------.  ,------.      ,-------------------------------------------.
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |------|  |------|      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|      |------|  |------|      |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+------+------|  |------|------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  | LBTN | RBTN |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      | LBTN | RBTN |  |DRAG_ | MID  |      |      |      |
+ *                        |      |      |      |      |      |  |SCROLL|  BTN |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ */
+    [_MOUSE] = LAYOUT(
+      _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______,          _______, _______,          _______, _______, _______, _______, _______, _______,
+      _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, _______, _______, _______, _______, _______, _______,
+                                 _______, _______, _______, KC_BTN1, KC_BTN2, DRAG_SCROLL, KC_BTN3, _______, _______, _______
+    ),
 
 // /*
 //  * Layer template - LAYOUT
@@ -405,13 +421,13 @@ void dead_accents_altgr_finished(tap_dance_state_t *state, void *user_data) {
     switch (dead_accents_altgr_tap_state.state) {
         case TD_SINGLE_TAP:
 	    register_code(KC_RALT);
-	    tap_code_delay(KC_GRV, 10);
+	    tap_code_delay(KC_QUOT, 10);
 	    unregister_code(KC_RALT);
 	    break;
         case TD_SINGLE_HOLD: register_code(KC_RALT); break;
         case TD_DOUBLE_TAP:
 	    register_code(KC_RALT);
-	    tap_code_delay(KC_QUOT, 10);
+	    tap_code_delay(KC_GRV, 10);
 	    unregister_code(KC_RALT);
 	    break;
         case TD_DOUBLE_HOLD:
@@ -495,3 +511,98 @@ tap_dance_action_t tap_dance_actions[] = {
 //    }
 //    return true;
 //};
+
+
+/* Mouse controls */
+
+void pointing_device_init_user(void) {
+    set_auto_mouse_layer(_MOUSE);
+    set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
+bool set_scrolling = false;
+
+// Modify these values to adjust the scrolling speed
+#define SCROLL_DIVISOR_H 8.0
+#define SCROLL_DIVISOR_V 8.0
+
+// Variables to store accumulated scroll values
+float scroll_accumulated_h = 0;
+float scroll_accumulated_v = 0;
+
+// Function to handle mouse reports and perform drag scrolling
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // Check if drag scrolling is active
+    //if (set_scrolling) {
+        // Calculate and accumulate scroll values based on mouse movement and divisors
+        scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
+        scroll_accumulated_v += (float)mouse_report.y / SCROLL_DIVISOR_V;
+
+        // Assign integer parts of accumulated scroll values to the mouse report
+        mouse_report.h = (int8_t)scroll_accumulated_h;
+        mouse_report.v = (int8_t)scroll_accumulated_v;
+
+        // Update accumulated scroll values by subtracting the integer parts
+        scroll_accumulated_h -= (int8_t)scroll_accumulated_h;
+        scroll_accumulated_v -= (int8_t)scroll_accumulated_v;
+
+        // Clear the X and Y values of the mouse report
+        mouse_report.x = 0;
+        mouse_report.y = 0;
+    //}
+    return mouse_report;
+}
+
+static uint16_t myr_scroll_timer_left = 0;
+static uint16_t myr_scroll_timer_right = 0;
+
+report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, report_mouse_t right_report) {
+    if (!set_scrolling) {
+	return pointing_device_combine_reports(left_report, right_report);
+    }
+
+    uint16_t left_timer = timer_elapsed(myr_scroll_timer_left);
+    if (abs(left_report.y) * left_timer > 640 || abs(left_report.x) * left_timer > 640) {
+	left_report.v = left_report.y > 0 ? -1 : ((left_report.y < 0) ? 1 : 0);
+	left_report.h = left_report.x < 0 ? -1 : ((left_report.x > 0) ? 1 : 0);
+	myr_scroll_timer_left = timer_read();
+    }
+
+    uint16_t right_timer = timer_elapsed(myr_scroll_timer_right);
+    if (abs(right_report.y) * right_timer > 640 || abs(right_report.x) * right_timer > 640) {
+	right_report.v = right_report.y > 0 ? -1 : ((right_report.y < 0) ? 1 : 0);
+	right_report.h = right_report.x < 0 ? -1 : ((right_report.x > 0) ? 1 : 0);
+	myr_scroll_timer_right = timer_read();
+    }
+
+    left_report.x = 0;
+    left_report.y = 0;
+    right_report.x = 0;
+    right_report.y = 0;
+
+    return pointing_device_combine_reports(left_report, right_report);
+}
+
+// Function to handle key events and enable/disable drag scrolling
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case DRAG_SCROLL:
+            // Toggle set_scrolling when DRAG_SCROLL key is pressed or released
+            set_scrolling = record->event.pressed;
+            break;
+        default:
+            break;
+    }
+    return true;
+}
+
+//// Function to handle layer changes and disable drag scrolling when not in AUTO_MOUSE_DEFAULT_LAYER
+//layer_state_t layer_state_set_user(layer_state_t state) {
+//    // Disable set_scrolling if the current layer is not the AUTO_MOUSE_DEFAULT_LAYER
+//    if (get_highest_layer(state) != AUTO_MOUSE_DEFAULT_LAYER) {
+//        set_scrolling = false;
+//    }
+//    return state;
+//}
+
+
